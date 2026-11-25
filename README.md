@@ -124,7 +124,7 @@ console.log(state.mode, Math.round(state.distance), state.crashCause);
 
 ## Licence
 
-Copyright 2026 Tricky.
+Copyright 2026 Trailbadger.
 
 The code is source-available under the
 [PolyForm Noncommercial License 1.0.0](LICENSE.md). You are welcome to
@@ -132,6 +132,6 @@ download it, play it, fork it and change it for any non-commercial purpose.
 Commercial use is not permitted.
 
 Not covered by that licence, and not to be reused in a fork: the Trailbadger
-name and logo (they belong to Trailbadger), and the "Brock & Tod" title and the
-Brock and Tod characters. See [NOTICE.md](NOTICE.md) for the details. If you
+name and logo, the "Brock & Tod" title, and the Brock and Tod characters. All
+rights in those are reserved by Trailbadger. See [NOTICE.md](NOTICE.md) for the details. If you
 fork the project, give it your own name, characters and icons.
