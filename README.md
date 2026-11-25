@@ -122,9 +122,16 @@ while (state.mode === 'riding') updateWorld(state, 1 / 60, 0, false);
 console.log(state.mode, Math.round(state.distance), state.crashCause);
 ```
 
-## Credits and licence
+## Licence
 
-The Trailbadger name and logo belong to Trailbadger. They are not covered by
-any licence for the code, so replace them if you fork this for something else.
-No licence has been chosen for the code yet, so all rights are reserved until
-one is added.
+Copyright 2026 Tricky.
+
+The code is source-available under the
+[PolyForm Noncommercial License 1.0.0](LICENSE.md). You are welcome to
+download it, play it, fork it and change it for any non-commercial purpose.
+Commercial use is not permitted.
+
+Not covered by that licence, and not to be reused in a fork: the Trailbadger
+name and logo (they belong to Trailbadger), and the "Brock & Tod" title and the
+Brock and Tod characters. See [NOTICE.md](NOTICE.md) for the details. If you
+fork the project, give it your own name, characters and icons.
