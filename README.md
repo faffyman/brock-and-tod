@@ -8,6 +8,66 @@ fox through the forest for as long as you can.
 - Installs to the home screen and then works fully offline.
 - About 400 KB in total. No accounts, no tracking, no network calls.
 
+## Features
+
+**The game**
+
+- A first-person mountain bike chase: Brock the badger rides after Tod the fox
+  through an endless forest.
+- Steer by touching the left or right half of the screen, or with the arrow
+  keys on a desktop.
+- Hit a tree and the ride ends. Lose sight of Tod for 3 seconds and Tod gets
+  away.
+- Three difficulties (Beginner, Normal, Expert) that change how dense the
+  trees are.
+- Ten levels. The ride gets faster every 500 m.
+- Catch Tod at level 10 for 1000 points, and the ride carries on from level 5.
+
+**Tricks and scoring**
+
+- Ramps to jump, with a combo multiplier up to x5 for ramps landed in a row.
+- A near-miss bonus for passing close to a trunk.
+- A stored boost for every 5 landed jumps: a burst of speed plus a shield that
+  bounces off trees and smashes through logs.
+- A score breakdown at the end of each ride.
+
+**Pickups**
+
+- Berries: points.
+- Mushroom: a longer out-of-sight allowance for 15 seconds.
+- Snake: Brock throws it at Tod, who then rides straight for 3 seconds.
+- Acorn: saves one crash.
+
+**Hazards**
+
+- Fallen logs and falling trees.
+- Bears that lean out from behind trees.
+- Birds that block the view for a moment.
+
+**Look and sound**
+
+- Six forest themes by level: spring, autumn, winter, redwood, pine and cherry
+  blossom.
+- Day and night rides alternate.
+- Tod taunts, sprints and looks back.
+- Music and every sound effect are generated in code, with on/off and volume
+  controls.
+
+**For the player**
+
+- High scores per difficulty and lifetime stats, saved on the device.
+- Pause, with automatic pause when the app loses focus.
+- A how-to-play panel.
+- An accessibility menu with reduce motion and easy ride, plus screen reader
+  announcements, flash limits, and cues that do not rely on colour alone.
+
+**Technical**
+
+- Installs to the home screen and plays fully offline.
+- Updates itself when opened online.
+- About 400 KB. No accounts, no tracking, no network calls.
+- Plain HTML, CSS and JavaScript. No build step and no dependencies.
+
 ## Play it locally
 
 The game is plain files, but browsers only load JavaScript modules over HTTP,
