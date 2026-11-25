@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Brock &amp; Tod</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#10170f">
+    <link rel="icon" type="image/png" href="assets/img/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/img/icon-180.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Brock &amp; Tod">
+    <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+    <canvas id="game" role="img" aria-label="Brock the badger rides a mountain bike through a forest chasing Tod the fox; progress and results are announced as text."></canvas>
+    <div id="live-polite" class="sr-only" aria-live="polite" aria-atomic="false"></div>
+    <div id="live-alert" class="sr-only" role="alert"></div>
+    <div id="hud" class="hud" aria-live="off" hidden>
+        <div class="hud__row">
+            <span class="hud__score"><span id="hud-score">0</span><small id="hud-distance">0 m</small></span>
+            <span id="hud-level" class="hud__level"><span id="hud-level-text">Lv 1</span><svg class="hud__star" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M12 2l2.9 6.6 7.100.7-5.400 4.700 1.600 7-6.200-3.700-6.200 3.700 1.600-7L2 9.300l7.100-.7z" fill="currentColor"/></svg><span class="sr-only hud__top-text">Tod can be caught</span></span>
+        </div>
+        <div class="hud__row hud__charges">
+            <span id="hud-charges" class="charges"></span>
+            <span id="hud-dots" class="dots"></span>
+            <span id="hud-combo" class="combo" hidden>x2</span>
+            <span id="hud-mushroom" class="held" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 14h4v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" fill="#f1e6cf"/><path d="M2 14a10 9 0 0 1 20 0z" fill="#d6322b"/><circle cx="8" cy="10.5" r="1.8" fill="#fff"/><circle cx="15" cy="8.5" r="1.5" fill="#fff"/><circle cx="17.5" cy="12" r="1" fill="#fff"/></svg><span id="hud-mushroom-s">0</span></span>
+            <span id="hud-acorn" class="held" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M5 11h14c0 5.5-3 10-7 11-4-1-7-5.5-7-11z" fill="#b5742d"/><path d="M3.5 11.5C3.5 6 7.500 3.5 12 3.5s8.5 2.500 8.5 8z" fill="#5e3a14"/><rect x="11" y="1.5" width="2" height="3" rx="1" fill="#5e3a14"/></svg></span>
+            <span id="hud-hint" class="hint" hidden>Hold both sides to boost</span>
+        </div>
+    </div>
+    <button type="button" id="pause-btn" class="pause-btn" aria-label="Pause" hidden><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg></button>
+    <div id="flash" class="flash" aria-hidden="true"></div>
+    <div id="message" class="message" hidden>
+        <div id="message-panel" class="message__panel">
+            <img id="message-logo" class="message__logo" src="assets/img/trailbadger-logo.webp" alt="Trailbadger logo: a smiling badger holds mountain bike handlebars, in front of a shield with pine trees and a mountain" width="480" height="519" hidden>
+            <p id="message-kicker" class="message__kicker"></p>
+            <h1 id="message-title" class="message__title"></h1>
+            <p id="message-badge" class="message__badge" hidden>New high score!</p>
+            <p id="message-line1" class="message__line"></p>
+            <table id="message-breakdown" class="breakdown" hidden>
+                <tbody>
+                    <tr><th scope="row">Distance</th><td id="bd-dist"></td><td id="bd-dist-pts" class="breakdown__pts"></td></tr>
+                    <tr><th scope="row">Jumps</th><td id="bd-jumps"></td><td id="bd-jump-pts" class="breakdown__pts"></td></tr>
+                    <tr><th scope="row">Berries</th><td id="bd-berries"></td><td id="bd-berry-pts" class="breakdown__pts"></td></tr>
+                    <tr><th scope="row">Near misses</th><td id="bd-near"></td><td id="bd-near-pts" class="breakdown__pts"></td></tr>
+                    <tr><th scope="row">Tod caught</th><td id="bd-catch"></td><td id="bd-catch-pts" class="breakdown__pts"></td></tr>
+                    <tr class="breakdown__total"><th scope="row">Total</th><td></td><td id="bd-total" class="breakdown__pts"></td></tr>
+                </tbody>
+            </table>
+            <p id="bd-saves" class="breakdown__note" hidden></p>
+            <p id="message-line2" class="message__line"></p>
+            <p id="message-line3" class="message__line"></p>
+            <div id="message-actions" class="message__actions" hidden>
+                <button type="button" class="diff-btn" data-difficulty="beginner" aria-pressed="false"><span>Beginner</span><small class="diff-btn__best">Best: -</small></button>
+                <button type="button" class="diff-btn" data-difficulty="normal" aria-pressed="false"><span>Normal</span><small class="diff-btn__best">Best: -</small></button>
+                <button type="button" class="diff-btn" data-difficulty="expert" aria-pressed="false"><span>Expert</span><small class="diff-btn__best">Best: -</small></button>
+            </div>
+        </div>
+        <button type="button" id="info-btn" class="corner-btn info-btn" aria-label="How to play">i</button>
+        <button type="button" id="sound-btn" class="corner-btn sound-btn" aria-label="Sound settings"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/><path d="M15 9a4 4 0 0 1 0 6M17.5 6.5a8 8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button type="button" id="access-btn" class="corner-btn access-btn" aria-label="Accessibility"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7.500" r="1.700" fill="currentColor"/><path d="M6.500 10.200h11M12 10.200v4.300M12 14.500l-2.700 4.300M12 14.500l2.700 4.300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" id="stats-btn" class="corner-btn stats-btn" aria-label="Stats"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><rect x="4" y="13" width="4" height="7" rx="1" fill="currentColor"/><rect x="10" y="4" width="4" height="16" rx="1" fill="currentColor"/><rect x="16" y="9" width="4" height="11" rx="1" fill="currentColor"/></svg></button>
+        <button type="button" id="install-btn" class="corner-btn install-btn" hidden>Install</button>
+        <div id="ios-hint" class="ios-hint" hidden>
+            <span>To install: tap Share, then Add to Home Screen.</span>
+            <button type="button" id="ios-hint-close" class="ios-hint__close" aria-label="Dismiss">&times;</button>
+        </div>
+        <button type="button" id="menu-btn" class="corner-btn menu-btn" hidden>Menu</button>
+    </div>
+    <div id="info-backdrop" class="info-backdrop" hidden>
+        <div id="info-panel" class="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
+            <div class="info-panel__head">
+                <h2 id="info-title">How to play</h2>
+                <button type="button" id="info-close" class="info-close" aria-label="Close">&times;</button>
+            </div>
+            <ul id="info-list" class="info-list"></ul>
+        </div>
+    </div>
+    <div id="sound-backdrop" class="info-backdrop" hidden>
+        <div class="info-panel" role="dialog" aria-modal="true" aria-labelledby="sound-title">
+            <div class="info-panel__head">
+                <h2 id="sound-title">Sound</h2>
+                <button type="button" id="sound-close" class="info-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="setting" role="group" aria-labelledby="set-music">
+                <span id="set-music" class="setting__label">Music</span>
+                <div class="seg">
+                    <button type="button" class="seg__btn" data-setting="music" data-value="true" aria-pressed="false">On</button>
+                    <button type="button" class="seg__btn" data-setting="music" data-value="false" aria-pressed="false">Off</button>
+                </div>
+            </div>
+            <div class="setting" role="group" aria-labelledby="set-effects">
+                <span id="set-effects" class="setting__label">Effects</span>
+                <div class="seg">
+                    <button type="button" class="seg__btn" data-setting="effects" data-value="true" aria-pressed="false">On</button>
+                    <button type="button" class="seg__btn" data-setting="effects" data-value="false" aria-pressed="false">Off</button>
+                </div>
+            </div>
+            <div class="setting" role="group" aria-labelledby="set-volume">
+                <span id="set-volume" class="setting__label">Volume</span>
+                <div class="seg">
+                    <button type="button" class="seg__btn" data-setting="volume" data-value="normal" aria-pressed="false">Normal</button>
+                    <button type="button" class="seg__btn" data-setting="volume" data-value="low" aria-pressed="false">Low</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="access-backdrop" class="info-backdrop" hidden>
+        <div class="info-panel" role="dialog" aria-modal="true" aria-labelledby="access-title">
+            <div class="info-panel__head">
+                <h2 id="access-title">Accessibility</h2>
+                <button type="button" id="access-close" class="info-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="setting-block">
+                <div class="setting" role="group" aria-labelledby="set-motion" aria-describedby="help-motion">
+                    <span id="set-motion" class="setting__label">Reduce motion</span>
+                    <div class="seg">
+                        <button type="button" class="seg__btn" data-setting="reduceMotion" data-value="true" aria-pressed="false">On</button>
+                        <button type="button" class="seg__btn" data-setting="reduceMotion" data-value="false" aria-pressed="false">Off</button>
+                    </div>
+                </div>
+                <p id="help-motion" class="setting__help">Turns off screen shake, flashes and drifting effects.</p>
+            </div>
+            <div class="setting-block">
+                <div class="setting" role="group" aria-labelledby="set-easy" aria-describedby="help-easy">
+                    <span id="set-easy" class="setting__label">Easy ride</span>
+                    <div class="seg">
+                        <button type="button" class="seg__btn" data-setting="easyRide" data-value="true" aria-pressed="false">On</button>
+                        <button type="button" class="seg__btn" data-setting="easyRide" data-value="false" aria-pressed="false">Off</button>
+                    </div>
+                </div>
+                <p id="help-easy" class="setting__help"></p>
+            </div>
+        </div>
+    </div>
+    <div id="stats-backdrop" class="info-backdrop" hidden>
+        <div class="info-panel" role="dialog" aria-modal="true" aria-labelledby="stats-title">
+            <div class="info-panel__head">
+                <h2 id="stats-title">Stats</h2>
+                <button type="button" id="stats-close" class="info-close" aria-label="Close">&times;</button>
+            </div>
+            <div id="stats-body" class="stats-body"></div>
+            <div class="stats-reset">
+                <button type="button" id="stats-reset" class="stats-reset__btn">Reset stats</button>
+                <small>High scores and sound settings stay as they are.</small>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
